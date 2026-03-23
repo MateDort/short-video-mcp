@@ -84,8 +84,21 @@ if not _anthropic_key:
 if not _elevenlabs_key:
     logger.error("ELEVENLABS_API_KEY is not set in .env")
 
-anthropic_client = anthropic.Anthropic(api_key=_anthropic_key)
-elevenlabs_client = ElevenLabs(api_key=_elevenlabs_key)
+# Lazy-init clients to keep server startup fast
+_anthropic_client = None
+_elevenlabs_client = None
+
+def get_anthropic_client():
+    global _anthropic_client
+    if _anthropic_client is None:
+        _anthropic_client = anthropic.Anthropic(api_key=_anthropic_key)
+    return _anthropic_client
+
+def get_elevenlabs_client():
+    global _elevenlabs_client
+    if _elevenlabs_client is None:
+        _elevenlabs_client = ElevenLabs(api_key=_elevenlabs_key)
+    return _elevenlabs_client
 
 VOICE_MAP = {
     "PETER": os.getenv("PETER_VOICE_ID", ""),
@@ -154,7 +167,7 @@ def generate_script(topic: str, content: str) -> list[dict]:
     """Generate a Peter/Stewie dialogue script via Anthropic API."""
     logger.info(f"Generating script for topic: {topic}")
 
-    response = anthropic_client.messages.create(
+    response = get_anthropic_client().messages.create(
         model="claude-sonnet-4-20250514",
         max_tokens=4096,
         system=SCRIPT_SYSTEM_PROMPT,
@@ -212,7 +225,7 @@ def generate_audio(dialogue: list[dict], temp_dir: str) -> tuple[str, list[dict]
         segment_path = os.path.join(temp_dir, f"segment_{i:03d}.mp3")
         for attempt in range(3):
             try:
-                audio_generator = elevenlabs_client.text_to_speech.convert(
+                audio_generator = get_elevenlabs_client().text_to_speech.convert(
                     text=line["caption"],
                     voice_id=voice_id,
                     model_id="eleven_multilingual_v2",
