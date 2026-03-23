@@ -1,0 +1,25 @@
+# Secrets — NEVER commit API keys
+.env
+
+# Output videos
+output/
+server.log
+
+# Large video assets (users provide their own)
+assets/background/*.mp4
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
