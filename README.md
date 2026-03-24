@@ -1,10 +1,25 @@
 # Short Video MCP Server
 
-Turn any topic into a TikTok-style short video narrated by **Peter Griffin** and **Stewie Griffin**.
+**Stop reading long AI answers. Watch them instead.**
 
-Ask Claude a question, then call `generate_short_video` — it creates a script, generates voice audio, and assembles a full portrait video with gameplay background, character overlays, and timed captions.
+Turn any Claude answer, PDF, PowerPoint, email, or topic into a TikTok-style short video narrated by **Peter Griffin** and **Stewie Griffin** — with gameplay background, character animations, and synced captions.
 
 ![Example Output](docs/example_screenshot.png)
+
+## Why?
+
+Claude just gave you a 2-page answer? Don't read it. Say **"generate a short video"** and Peter and Stewie will explain it to you in 60 seconds.
+
+**This isn't limited to one use case.** It turns *any* answer into a video:
+
+- **Don't want to read Claude's long answer?** → Just add "generate a short video" and watch it instead
+- **Got a 60-slide PowerPoint from your teacher?** → Upload it, ask Claude to generate a video for each slide — now scroll through short videos instead of slides
+- **Want to study from a PDF?** → Upload it, generate a video — every key fact, date, and detail is included so you don't miss anything
+- **Have a Gmail MCP set up?** → Ask Claude to read your inbox and generate a short video — Peter and Stewie catch you up on your emails
+- **Morning briefing?** → Set up a schedule and get a daily video recap of your news, inbox, and Whoop health stats narrated by Peter and Stewie
+- **Any LLM answer, anywhere** → Works with Claude Desktop, Claude Code, or any MCP-compatible client
+
+For studying, it covers **every important detail** — names, dates, numbers, key takeaways — nothing gets skipped. The humor just makes it stick.
 
 ## How It Works
 
@@ -110,21 +125,29 @@ Background videos should be **portrait orientation** (or they'll be cropped to f
 
 Then restart Claude.
 
-## Usage
+## Usage Examples
 
-In Claude, just ask a question and tell it to make a video:
+**Basic — any question:**
+> "Explain quantum computing and generate a short video about it"
 
-> "Explain why the sky is blue and make a short video about it"
+**PDF studying:**
+> *[Upload PDF]* "Summarize this and generate a short video — include every key detail"
 
-Or provide detailed content:
+**PowerPoint slides:**
+> *[Upload PPT]* "Generate a short video for each slide so I can scroll through them"
 
-> "Here's my notes on quantum computing [paste content]. Generate a short video from this."
+**Email catch-up (with Gmail MCP):**
+> "Read my inbox and generate a short video summarizing my unread emails"
 
-It works great with PDFs too — upload a PDF, ask Claude to summarize it, then generate a video.
+**Morning briefing (with scheduled tasks):**
+> "Every morning at 8am, read my inbox, check my Whoop stats, and generate a short video briefing"
+
+**Claude Code output:**
+> *[After Claude makes code changes]* "Generate a short video explaining what you just changed"
 
 ## Master Prompt (One-Click Setup)
 
-Copy and paste this prompt into Claude Code or Claude Desktop to set everything up automatically:
+Copy and paste this prompt into **Claude Code** or **Claude Desktop** to set everything up automatically:
 
 ```
 I want to set up the short-video MCP server from GitHub.
@@ -163,8 +186,8 @@ short-video-mcp/
 
 ## How the Video is Built
 
-1. **Script Generation** — Claude (via Anthropic API) writes a dialogue between Peter and Stewie that covers all the key information from your content, staying in character with humor
-2. **Voice Synthesis** — Each dialogue line is sent to ElevenLabs TTS with the corresponding voice ID, then all segments are concatenated
+1. **Script Generation** — Claude (via Anthropic API) writes a dialogue between Peter and Stewie that covers all the key information from your content, staying in character with humor. For studying, every fact is included — nothing gets skipped.
+2. **Voice Synthesis** — Each dialogue line is sent to ElevenLabs TTS with the corresponding voice ID, then all segments are concatenated.
 3. **Video Assembly** — FFmpeg composites everything:
    - Background gameplay video (randomly selected, looped)
    - Character PNGs positioned bottom-left (Stewie) and bottom-right (Peter)
@@ -191,9 +214,15 @@ short-video-mcp/
 | Claude says "credits" or "quota" | That's Claude hallucinating — there's no credit system. The server runs locally. Just retry. |
 | Server not showing in Claude | Make sure the path in your config is absolute and points to `server.py`. Restart Claude fully (Cmd+Q). |
 
-## Credits
+## Acknowledgments
 
-Inspired by [HackEmory-backend](https://github.com/Jayyk09/HackEmory-backend) by [@Jayyk09](https://github.com/Jayyk09).
+This project was inspired by [HackEmory-backend](https://github.com/Jayyk09/HackEmory-backend) by [@Jayyk09](https://github.com/Jayyk09) — the original hackathon project that proved AI-generated short videos with cartoon characters could actually work. Their approach to character overlays, TTS narration, and video assembly laid the groundwork for this MCP server. Huge thanks for making it open source and sparking the idea.
+
+Built with:
+- [Anthropic Claude API](https://www.anthropic.com/) — script generation
+- [ElevenLabs](https://elevenlabs.io/) — voice synthesis
+- [FFmpeg](https://ffmpeg.org/) — video assembly
+- [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) — Claude integration
 
 ## License
 
